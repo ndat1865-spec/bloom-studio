@@ -1,0 +1,11 @@
+# Docker chi doc .dockerignore nam TRONG build context. Compose dat context la thu
+# muc service nay, nen file phai o day chu khong phai o goc repo.
+#
+# Quan trong nhat la target/: gui ban da bien dich cua may that sang Docker vua cham
+# vua lam hong cache, va co the de lan .jar cu vao anh.
+target/
+.mvn/wrapper/*.jar.lck
+uploads/
+*.iml
+.idea/
+*.log

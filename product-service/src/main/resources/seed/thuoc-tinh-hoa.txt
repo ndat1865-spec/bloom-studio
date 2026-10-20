@@ -1,0 +1,23 @@
+# Dip va mau cho danh muc hoa mac dinh (xem AttributeSeeder).
+# Dinh dang: ten san pham | cac dip, ngan cach dau phay | mau
+# Chi gan cho san pham CHUA co dip va CHUA co mau - khong ghi de phan ADMIN da sua.
+Noir Dahlia Hand-Tied|BIRTHDAY,THANKS|PURPLE
+Midnight Garden Bouquet|LOVE,BIRTHDAY|RED
+Amber Dried Stems|OPENING,THANKS|YELLOW
+Crimson Cluster|LOVE,CONGRATS|RED
+Verdant Hydrangea|THANKS,OPENING|GREEN
+Deep Red Chrysanthemum|BIRTHDAY,LOVE|RED
+Plum Bloom Study|SYMPATHY,THANKS|PURPLE
+Lilac by the Window|BIRTHDAY,THANKS|PURPLE
+Magnolia Statement|OPENING,SYMPATHY|WHITE
+Rowan & Berry Table|OPENING,CONGRATS|YELLOW
+Ranunculus Grey Study|SYMPATHY,OPENING|WHITE
+Garden Jars Set|CONGRATS,BIRTHDAY|MIXED
+Country Table Centrepiece|CONGRATS,OPENING|MIXED
+Silk Red Petal Installation|OPENING,LOVE|RED
+Sunshine Blossom Arch|WEDDING|WHITE
+Pink Dahlia Bridal|WEDDING,LOVE|PINK
+Peony Blush Ceremony|WEDDING|PINK
+Carnation Buttonhole Set|WEDDING|PINK
+White Bouquet in Sunlight|WEDDING,SYMPATHY|WHITE
+Hortensia Reception|WEDDING,CONGRATS|MIXED

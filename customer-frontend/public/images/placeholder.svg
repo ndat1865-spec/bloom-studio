@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img" aria-label="Chua co anh san pham">
+  <rect width="400" height="500" fill="#2D3430"/>
+  <g stroke="#42574B" stroke-width="1.5" fill="none">
+    <circle cx="200" cy="228" r="26"/>
+    <circle cx="164" cy="264" r="26"/>
+    <circle cx="236" cy="264" r="26"/>
+    <circle cx="200" cy="300" r="26"/>
+    <path d="M200 326v66"/>
+  </g>
+  <circle cx="200" cy="264" r="12" fill="#42574B"/>
+  <text x="200" y="424" text-anchor="middle" fill="#A39C8F"
+        font-family="DM Sans, system-ui, sans-serif" font-size="13" letter-spacing="2.2">
+    NO IMAGE
+  </text>
+</svg>

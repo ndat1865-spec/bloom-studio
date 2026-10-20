@@ -1,0 +1,179 @@
+# path: api-gateway/src/main/resources/application.yml
+# purpose: dinh tuyen va CORS cho toan he thong - diem vao DUY NHAT cua frontend
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            # ---------- auth-service :8081 ----------
+            - id: auth-service
+              uri: ${AUTH_SERVICE_URI:http://localhost:8081}
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                - RewritePath=/api/auth/(?<segment>.*), /auth/${segment}
+
+            - id: auth-service-users
+              uri: ${AUTH_SERVICE_URI:http://localhost:8081}
+              predicates:
+                - Path=/api/users,/api/users/**
+              filters:
+                - RewritePath=/api/users/(?<segment>.*), /users/${segment}
+                - RewritePath=/api/users, /users
+
+            - id: auth-service-api-keys
+              uri: ${AUTH_SERVICE_URI:http://localhost:8081}
+              predicates:
+                - Path=/api/api-keys,/api/api-keys/**
+              filters:
+                - RewritePath=/api/api-keys/(?<segment>.*), /api-keys/${segment}
+                - RewritePath=/api/api-keys, /api-keys
+
+            # ---------- product-service :8082 ----------
+            - id: product-service
+              uri: ${PRODUCT_SERVICE_URI:http://localhost:8082}
+              predicates:
+                - Path=/api/products,/api/products/**
+              filters:
+                - RewritePath=/api/products/(?<segment>.*), /products/${segment}
+                - RewritePath=/api/products, /products
+
+            - id: category-service
+              uri: ${PRODUCT_SERVICE_URI:http://localhost:8082}
+              predicates:
+                - Path=/api/categories,/api/categories/**
+              filters:
+                - RewritePath=/api/categories/(?<segment>.*), /categories/${segment}
+                - RewritePath=/api/categories, /categories
+
+            # Duyet danh gia (ADMIN). Danh gia theo tung san pham di qua route
+            # /api/products/** o tren: /api/products/{id}/reviews
+            - id: review-service
+              uri: ${PRODUCT_SERVICE_URI:http://localhost:8082}
+              predicates:
+                - Path=/api/reviews,/api/reviews/**
+              filters:
+                - RewritePath=/api/reviews/(?<segment>.*), /reviews/${segment}
+                - RewritePath=/api/reviews, /reviews
+            # Anh san pham - the <img> cua trinh duyet khong gui duoc header tuy chinh
+            - id: product-uploads
+              uri: ${PRODUCT_SERVICE_URI:http://localhost:8082}
+              predicates:
+                - Path=/uploads/**
+
+            # Route danh cho doi tac ngoai - dung X-API-KEY thay cho JWT
+            - id: product-service-partner
+              uri: ${PRODUCT_SERVICE_URI:http://localhost:8082}
+              predicates:
+                - Path=/api/public/products
+              filters:
+                - RewritePath=/api/public/products, /products
+
+            # ---------- order-service :8083 ----------
+            - id: order-service
+              uri: ${ORDER_SERVICE_URI:http://localhost:8083}
+              predicates:
+                - Path=/api/orders,/api/orders/**
+              filters:
+                - RewritePath=/api/orders/(?<segment>.*), /orders/${segment}
+                - RewritePath=/api/orders, /orders
+            # Ma giam gia - nam o order-service vi gan voi viec tinh tien don
+            - id: voucher-service
+              uri: ${ORDER_SERVICE_URI:http://localhost:8083}
+              predicates:
+                - Path=/api/vouchers,/api/vouchers/**
+              filters:
+                - RewritePath=/api/vouchers/(?<segment>.*), /vouchers/${segment}
+                - RewritePath=/api/vouchers, /vouchers
+
+            # Dat hoa theo yeu cau (khach mo ta, studio bao gia) - nam o order-service vi
+            # dong y bao gia chinh la dat hang
+            - id: custom-request-service
+              uri: ${ORDER_SERVICE_URI:http://localhost:8083}
+              predicates:
+                - Path=/api/custom-requests,/api/custom-requests/**
+              filters:
+                - RewritePath=/api/custom-requests/(?<segment>.*), /custom-requests/${segment}
+                - RewritePath=/api/custom-requests, /custom-requests
+            # Anh bo hoa thanh pham va anh mau cua khach - the <img> khong gui duoc JWT
+            - id: order-media
+              uri: ${ORDER_SERVICE_URI:http://localhost:8083}
+              predicates:
+                - Path=/order-media/**
+
+            # Giao hang GHN (danh muc dia gioi, xem truoc phi) - nam o order-service vi phi
+            # giao hang la mot phan cua tong tien don
+            - id: shipping-service
+              uri: ${ORDER_SERVICE_URI:http://localhost:8083}
+              predicates:
+                - Path=/api/shipping/**
+              filters:
+                - RewritePath=/api/shipping/(?<segment>.*), /shipping/${segment}
+
+            # ---------- payment-service :8084 ----------
+            # Gom ca IPN / callback cua VNPay, MoMo, ZaloPay: cong thanh toan goi vao
+            # /api/payments/... cua Gateway nhu moi client khac.
+            - id: payment-service
+              uri: ${PAYMENT_SERVICE_URI:http://localhost:8084}
+              predicates:
+                - Path=/api/payments,/api/payments/**
+              filters:
+                - RewritePath=/api/payments/(?<segment>.*), /payments/${segment}
+                - RewritePath=/api/payments, /payments
+
+            # ---------- notification-service :8085 ----------
+            # Chi co nhat ky thong bao cho ADMIN; viec gui thu di qua RabbitMQ, khong qua day.
+            - id: notification-service
+              uri: ${NOTIFICATION_SERVICE_URI:http://localhost:8085}
+              predicates:
+                - Path=/api/notifications,/api/notifications/**
+              filters:
+                - RewritePath=/api/notifications/(?<segment>.*), /notifications/${segment}
+                - RewritePath=/api/notifications, /notifications
+
+            # ---------- chat-service :8086 ----------
+            # Chat khach - studio, tro ly AI (Claude API) tra loi truoc
+            - id: chat-service
+              uri: ${CHAT_SERVICE_URI:http://localhost:8086}
+              predicates:
+                - Path=/api/chat/**
+              filters:
+                - RewritePath=/api/chat/(?<segment>.*), /chat/${segment}
+
+          # CORS khai bao DUY NHAT o day. Khong service nao khac duoc tu khai - neu moi
+          # service mot kieu thi khi loi rat kho biet cho nao dang chan.
+          # Dung hai origin: 5173 = customer-frontend, 5174 = admin-frontend.
+          # Ca hai vite deu strictPort nen khong co chuyen app nay nhay sang cong app kia.
+          # https://...:5173 la customer-frontend chay `npm run dev:https` - can cho ZaloPay,
+          # vi ZaloPay chi dua khach ve redirecturl dang https://.
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - http://localhost:5173
+                  - http://127.0.0.1:5173
+                  - https://localhost:5173
+                  - https://127.0.0.1:5173
+                  - http://localhost:5174
+                  - http://127.0.0.1:5174
+                allowedMethods: "*"
+                allowedHeaders: "*"
+                maxAge: 3600
+
+server:
+  port: 8080
+
+# Key doi tac khong con nam trong file nay. auth-service giu bang api_keys (chu so huu,
+# scope, trang thai, han dung); Gateway chi hoi sang do va nho ket qua.
+partner:
+  auth-service-url: ${AUTH_SERVICE_URI:http://localhost:8081}
+  # Thoi gian nho ket qua kiem tra key. Doi lai: key vua thu hoi van dung duoc toi khi
+  # het khoang nay. Dat 0 de tat cache, tien khi trinh bay canh thu hoi key.
+  cache-ttl-seconds: ${PARTNER_KEY_CACHE_TTL:60}
+
+# LUU Y: /internal/** cua product-service va order-service CO TINH khong duoc khai o day,
+# nen doi tac ngoai va frontend khong the goi toi reserve-stock / release-stock hay bao
+# "don da thanh toan" (/internal/orders/{id}/paid) qua Gateway.

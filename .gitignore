@@ -1,0 +1,17 @@
+**/target/
+**/node_modules/
+**/dist/
+**/.idea/
+**/.vscode/
+*.iml
+
+# Mat khau MySQL va bien moi truong rieng tung may. File .env.example VAN duoc commit.
+**/.env
+**/.env.local
+
+# Anh admin tai len luc chay. Anh mau nam trong
+# product-service/src/main/resources/static/uploads/seed/ va CO duoc commit.
+/*/uploads/
+
+*.log
+.DS_Store

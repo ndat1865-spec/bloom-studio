@@ -1,0 +1,331 @@
+# Trien khai ca he thong bang mot lenh: docker compose up --build
+#
+# Nguyen tac giu nguyen khi chay bang Docker: MOI service mot CSDL rieng, khong
+# service nao doc CSDL cua service khac. Vi vay co ba container MySQL chu khong
+# phai mot container ba schema — dung ranh gioi da chot o thiet-ke-bien-gioi-service.md.
+#
+# Khac biet duy nhat so voi chay tay: dia chi khong con la localhost ma la TEN
+# SERVICE trong mang cua Compose. Ca ba cho do deu da tach san ra bien moi truong
+# (AUTH_SERVICE_URI, PRODUCT_SERVICE_URI, ORDER_SERVICE_URI, PRODUCT_SERVICE_URL,
+# DB_HOST) nen khong phai sua dong ma nao.
+#
+# Khoa GHN / VNPay / MoMo / ZaloPay doc tu .env. De trong thi cong do tu an di (COD van
+# chay), GHN de trong thi dia chi go tu do va phi giao hang co dinh.
+
+name: bloom
+
+# Gioi han bo nho JVM. Khong co dong nay, JVM trong container lay heap toi da = 25% RAM cua
+# may ao Docker (~1,5 GB moi service) - 6 service Java la vuot RAM, Docker sap. 256 MB heap la
+# du cho moi service cua do an.
+x-java-opts: &java-opts "-Xmx256m -XX:MaxMetaspaceSize=192m -Xss512k -XX:+UseSerialGC"
+
+services:
+  # ---------- CSDL, moi service mot cai ----------
+  auth-db:
+    image: mysql:8
+    # Tat bo giam sat noi bo cua MySQL: bot ~100-150 MB moi container. Ca stack chay tren
+    # Docker gioi han 4 GB RAM (WSL2) - khong co dong nay thi Docker kill bot container.
+    command: ["--performance-schema=OFF", "--innodb-buffer-pool-size=64M"]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: bloom_auth
+    volumes:
+      - auth-db-data:/var/lib/mysql
+    healthcheck:
+      # Cac service phai doi CSDL san sang that su. Khong co buoc nay thi Spring
+      # khoi dong truoc, khong ket noi duoc va container chet ngay.
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  product-db:
+    image: mysql:8
+    # Tat bo giam sat noi bo cua MySQL: bot ~100-150 MB moi container. Ca stack chay tren
+    # Docker gioi han 4 GB RAM (WSL2) - khong co dong nay thi Docker kill bot container.
+    command: ["--performance-schema=OFF", "--innodb-buffer-pool-size=64M"]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: bloom_product
+    volumes:
+      - product-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  order-db:
+    image: mysql:8
+    # Tat bo giam sat noi bo cua MySQL: bot ~100-150 MB moi container. Ca stack chay tren
+    # Docker gioi han 4 GB RAM (WSL2) - khong co dong nay thi Docker kill bot container.
+    command: ["--performance-schema=OFF", "--innodb-buffer-pool-size=64M"]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: bloom_order
+    volumes:
+      - order-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  payment-db:
+    image: mysql:8
+    # Tat bo giam sat noi bo cua MySQL: bot ~100-150 MB moi container. Ca stack chay tren
+    # Docker gioi han 4 GB RAM (WSL2) - khong co dong nay thi Docker kill bot container.
+    command: ["--performance-schema=OFF", "--innodb-buffer-pool-size=64M"]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: bloom_payment
+    volumes:
+      - payment-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  # ---------- Ha tang nhan tin + email ----------
+  # RabbitMQ: order-service phat su kien, notification-service nghe. Cong 15672 la trang
+  # quan tri (guest/guest) - lo ra de xem queue, exchange, DLQ khi trinh bay.
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 20s
+
+  # Mailpit: hop thu gia lap, nhan moi email ma khong gui ra Internet.
+  # Xem thu tai http://localhost:8025
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "8025:8025"
+
+  notification-db:
+    image: mysql:8
+    # Tat bo giam sat noi bo cua MySQL: bot ~100-150 MB moi container. Ca stack chay tren
+    # Docker gioi han 4 GB RAM (WSL2) - khong co dong nay thi Docker kill bot container.
+    command: ["--performance-schema=OFF", "--innodb-buffer-pool-size=64M"]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: bloom_notification
+    volumes:
+      - notification-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  chat-db:
+    image: mysql:8
+    command: ["--performance-schema=OFF", "--innodb-buffer-pool-size=64M"]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: bloom_chat
+    volumes:
+      - chat-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  # ---------- Cac service ----------
+  auth-service:
+    build: ./auth-service
+    environment:
+      JAVA_TOOL_OPTIONS: *java-opts
+      DB_HOST: auth-db
+      DB_PASSWORD: ${DB_PASSWORD}
+      # Phai GIONG HET o ca ba service backend, neu khong token ky o day se bi
+      # product-service va order-service tu choi.
+      JWT_SECRET: ${JWT_SECRET}
+      # Dang nhap bang Google - de trong thi nut Google tu an
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+    depends_on:
+      auth-db:
+        condition: service_healthy
+
+  product-service:
+    build: ./product-service
+    environment:
+      JAVA_TOOL_OPTIONS: *java-opts
+      DB_HOST: product-db
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      # Hoi order-service "khach da nhan hang chua" truoc khi cho danh gia.
+      # Khong khai depends_on: loi goi chi xay ra khi co nguoi gui danh gia, va order-service
+      # da depends_on product-service - khai nguoc lai se thanh vong phu thuoc.
+      ORDER_SERVICE_URL: http://order-service:8083
+      # Anh tai len luc chay phai ra volume, neu khong xoa container la mat anh.
+      # Anh seed nam trong classpath (static/uploads/seed) nen khong lien quan.
+      UPLOAD_DIR: /var/bloom/uploads
+    volumes:
+      - product-uploads:/var/bloom/uploads
+    depends_on:
+      product-db:
+        condition: service_healthy
+
+  order-service:
+    build: ./order-service
+    environment:
+      JAVA_TOOL_OPTIONS: *java-opts
+      DB_HOST: order-db
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      PRODUCT_SERVICE_URL: http://product-service:8082
+      # Giao Hang Nhanh - token va shop lay tai https://5sao.ghn.dev (moi truong thu nghiem)
+      GHN_BASE_URL: ${GHN_BASE_URL:-https://dev-online-gateway.ghn.vn/shiip/public-api}
+      GHN_TOKEN: ${GHN_TOKEN:-}
+      GHN_SHOP_ID: ${GHN_SHOP_ID:-}
+      # Phat su kien don hang. RabbitMQ chet thi don van dat duoc, chi mat thong bao.
+      RABBITMQ_HOST: rabbitmq
+      # Giao hoa tuoi: gio chot don trong ngay, tinh GHN duoc giao (201 = Ha Noi)
+      ORDER_SAME_DAY_CUTOFF_HOUR: ${ORDER_SAME_DAY_CUTOFF_HOUR:-15}
+      ORDER_DELIVERY_PROVINCE_IDS: ${ORDER_DELIVERY_PROVINCE_IDS:-201}
+      # Anh hoa thanh pham + anh mau cua khach: ra volume, xoa container khong mat anh
+      ORDER_MEDIA_DIR: /var/bloom/order-media
+    volumes:
+      - order-media:/var/bloom/order-media
+    depends_on:
+      order-db:
+        condition: service_healthy
+      product-service:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
+  notification-service:
+    build: ./notification-service
+    environment:
+      JAVA_TOOL_OPTIONS: *java-opts
+      DB_HOST: notification-db
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      AUTH_SERVICE_URL: http://auth-service:8081
+      RABBITMQ_HOST: rabbitmq
+      # Mac dinh gui vao Mailpit. Muon gui thu that qua Gmail thi dat cac bien MAIL_* trong .env
+      # (xem .env.example) - khong dat gi thi van la Mailpit nhu cu.
+      MAIL_HOST: ${MAIL_HOST:-mailpit}
+      MAIL_PORT: ${MAIL_PORT:-1025}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_SMTP_AUTH: ${MAIL_SMTP_AUTH:-false}
+      MAIL_STARTTLS: ${MAIL_STARTTLS:-false}
+      NOTIFICATION_FROM: ${NOTIFICATION_FROM:-Bloom Studio <no-reply@bloomstudio.local>}
+      NOTIFICATION_SHOP_EMAIL: ${NOTIFICATION_SHOP_EMAIL:-shop@bloomstudio.local}
+      # Anh bo hoa trong email tro ve Gateway
+      NOTIFICATION_MEDIA_BASE_URL: ${PAYMENT_PUBLIC_BASE_URL:-http://localhost:8080}
+    depends_on:
+      notification-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  payment-service:
+    build: ./payment-service
+    environment:
+      JAVA_TOOL_OPTIONS: *java-opts
+      DB_HOST: payment-db
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      ORDER_SERVICE_URL: http://order-service:8083
+      # Trinh duyet cua khach quay ve day sau khi tra tien (frontend chay ngoai Docker)
+      PAYMENT_RETURN_URL: ${PAYMENT_RETURN_URL:-http://localhost:5173/payment/result}
+      # Dia chi cong khai de cong thanh toan goi IPN. localhost thi IPN khong toi duoc -
+      # bo doi soat moi phut se hoi lai cong thanh toan thay the.
+      PAYMENT_PUBLIC_BASE_URL: ${PAYMENT_PUBLIC_BASE_URL:-http://localhost:8080}
+      VNPAY_TMN_CODE: ${VNPAY_TMN_CODE:-}
+      VNPAY_HASH_SECRET: ${VNPAY_HASH_SECRET:-}
+      MOMO_PARTNER_CODE: ${MOMO_PARTNER_CODE:-}
+      MOMO_ACCESS_KEY: ${MOMO_ACCESS_KEY:-}
+      MOMO_SECRET_KEY: ${MOMO_SECRET_KEY:-}
+      ZALOPAY_APP_ID: ${ZALOPAY_APP_ID:-}
+      ZALOPAY_KEY1: ${ZALOPAY_KEY1:-}
+      ZALOPAY_KEY2: ${ZALOPAY_KEY2:-}
+    depends_on:
+      payment-db:
+        condition: service_healthy
+      order-service:
+        condition: service_started
+
+  chat-service:
+    build: ./chat-service
+    environment:
+      JAVA_TOOL_OPTIONS: *java-opts
+      DB_HOST: chat-db
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      # Tro ly AI doc du lieu that qua API cua hai service nay
+      PRODUCT_SERVICE_URL: http://product-service:8082
+      ORDER_SERVICE_URL: http://order-service:8083
+      # Claude API - de trong thi tat AI, moi cuoc chat chuyen thang nhan vien
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-opus-5-5}
+      ANTHROPIC_EFFORT: ${ANTHROPIC_EFFORT:-low}
+    depends_on:
+      chat-db:
+        condition: service_healthy
+      product-service:
+        condition: service_started
+      order-service:
+        condition: service_started
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      # Cong duy nhat lo ra ngoai. Ba service kia chi goi duoc tu trong mang
+      # noi bo cua Compose — dung tinh than "Gateway la diem vao duy nhat",
+      # chat hon ca khi chay tay tren may that.
+      - "8080:8080"
+    environment:
+      JAVA_TOOL_OPTIONS: *java-opts
+      AUTH_SERVICE_URI: http://auth-service:8081
+      PRODUCT_SERVICE_URI: http://product-service:8082
+      ORDER_SERVICE_URI: http://order-service:8083
+      PAYMENT_SERVICE_URI: http://payment-service:8084
+      NOTIFICATION_SERVICE_URI: http://notification-service:8085
+      CHAT_SERVICE_URI: http://chat-service:8086
+      PARTNER_KEY_CACHE_TTL: ${PARTNER_KEY_CACHE_TTL:-60}
+    depends_on:
+      auth-service:
+        condition: service_started
+      product-service:
+        condition: service_started
+      order-service:
+        condition: service_started
+      payment-service:
+        condition: service_started
+      notification-service:
+        condition: service_started
+      chat-service:
+        condition: service_started
+
+volumes:
+  auth-db-data:
+  product-db-data:
+  order-db-data:
+  payment-db-data:
+  notification-db-data:
+  chat-db-data:
+  rabbitmq-data:
+  product-uploads:
+  order-media:

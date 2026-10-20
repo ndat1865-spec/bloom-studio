@@ -1,0 +1,25 @@
+# Ten tieng Viet, thanh phan, so bong, co bo va so ngay dat truoc cho danh muc mac dinh
+# (xem FlowerDetailSeeder). Chi ap cho san pham CHUA co thanh phan - khong ghi de phan
+# ADMIN da sua.
+# Dinh dang: ten goc (danh-muc-hoa.txt) | ten tieng Viet | so bong (- = khong tinh) |
+#            co 3 co (1/0) | so ngay dat truoc | thanh phan | mo ta
+Noir Dahlia Hand-Tied|Bó thược dược Noir|15|1|0|Thược dược đỏ thẫm, bạch đàn, cỏ lau theo mùa; gói giấy kraft xám than|Thược dược lõi sẫm bó tay cùng bạch đàn và cỏ theo mùa, gói giấy kraft xám than. Hợp tặng sinh nhật người thích gam trầm.
+Midnight Garden Bouquet|Bó hồng Vườn Đêm|20|1|0|Hồng đỏ rượu vang, cúc, hoa vườn nhỏ; gói giấy lụa đen|Phối màu trầm nhất mùa này: hồng đỏ rượu vang, cúc và hoa vườn nhỏ, cắt ngay buổi sáng hôm giao.
+Amber Dried Stems|Bình hoa khô Hổ Phách|25|1|0|Cỏ lau, bông lúa mì, lá khô tông hổ phách; bình gốm mộc|Hoa khô tông hổ phách, giữ được nhiều tháng — hợp bàn làm việc, hành lang hay quầy lễ tân.
+Crimson Cluster|Bó cẩm tú cầu Đỏ Thắm|7|1|0|Cẩm tú cầu đỏ thẫm, lá bạc; bó kiểu vườn|Cẩm tú cầu đỏ thẫm cùng lá ánh bạc, bó chặt theo phong cách vườn.
+Verdant Hydrangea|Cẩm tú cầu xanh bình gốm|1|0|0|1 bông cẩm tú cầu xanh cỡ lớn, bình gốm men mờ|Một bông cẩm tú cầu xanh cỡ lớn cắm sẵn trong bình gốm men mờ, nhận là đặt lên bàn được ngay.
+Deep Red Chrysanthemum|Bó cúc đỏ thẫm|20|1|0|Cúc mẫu đơn đỏ thẫm, lá phụ; gói giấy kraft|Cúc đỏ thẫm dày bông, bền lâu và nổi bật một cách lặng lẽ. Bó được đặt tặng cuối tuần nhiều nhất.
+Plum Bloom Study|Bó hoa tím mận|12|1|0|Hoa tông tím mận, lá phụ; đế gỗ mộc|Một cụm nhỏ hoa tông tím mận đặt trên gỗ mộc — gần một bức tĩnh vật hơn là một bó hoa.
+Lilac by the Window|Tử đinh hương bên cửa sổ|10|1|0|Tử đinh hương, bình sứ trắng|Tử đinh hương thơm, cắt lúc sáng sớm và cắm trong bình sứ trắng. Chỉ có theo mùa.
+Magnolia Statement|Mộc lan trắng đón khách|5|0|2|Cành mộc lan trắng cỡ lớn, bình cao nền đen|Mộc lan trắng trên nền đen — làm cho bàn đón khách của sự kiện buổi tối. Cần đặt trước 2 ngày để chọn cành.
+Rowan & Berry Table|Hoa bàn tiệc Thu Quả Mọng|-|0|2|Quả mọng, cúc cam cháy, lá chuyển màu|Trang trí bàn tiệc mùa thu: quả mọng, cúc cam cháy và lá chuyển màu.
+Ranunculus Grey Study|Mao lương nền xám|20|0|2|Hoa mao lương, bình thấp nền xám|Mao lương trên nền xám, bố cục tiết chế cho không gian triển lãm và showroom.
+Garden Jars Set|Bộ 6 lọ thược dược bàn dài|36|0|2|6 lọ thuỷ tinh, thược dược nhiều màu|Sáu lọ thuỷ tinh thược dược nhiều màu, đặt dọc chiều dài bàn tiệc.
+Country Table Centrepiece|Hoa giữa bàn đồng quê|-|0|2|Hoa đồng nội, thảo mộc tươi; khay thấp|Hoa giữa bàn dáng thấp kiểu đồng quê — hoa đồng nội và thảo mộc tươi.
+Silk Red Petal Installation|Vách cánh hoa đỏ (3 mét)|-|0|3|Cánh hoa đỏ, khung dựng tại chỗ|Vách cánh hoa đỏ dựng tại sự kiện. Giá tính cho mỗi 3 mét dài, dành cho tiệc tối.
+Sunshine Blossom Arch|Cổng hoa cưới Nắng Xuân|-|0|7|Hoa trắng, lá xanh, khung cổng dựng tại chỗ|Cổng hoa lễ cưới mùa xuân với hoa trắng và lá xanh, dựng cho không gian ngoài trời ban ngày.
+Pink Dahlia Bridal|Hoa cầm tay cô dâu thược dược hồng|15|0|3|Thược dược hồng, ruy băng lụa|Bó hoa cô dâu thược dược hồng, buộc ruy băng lụa.
+Peony Blush Ceremony|Trọn gói hoa lễ cưới mẫu đơn hồng|-|0|7|Mẫu đơn, hồng vườn; lối đi và lễ đài|Trọn gói hoa lễ cưới tông hồng phấn — mẫu đơn và hồng vườn, từ lối đi tới lễ đài.
+Carnation Buttonhole Set|Bộ hoa cài áo cẩm chướng|-|0|3|Cẩm chướng hồng, cho chú rể và phù rể|Hoa cài áo cho chú rể và phù rể: cẩm chướng hồng trên nền trắng.
+White Bouquet in Sunlight|Bó hoa trắng Nắng Chiều|25|1|0|Hồng trắng, cát tường trắng, baby; gói giấy lụa trắng|Bó hoa toàn trắng, nhẹ và sáng — hợp lễ cưới chiều muộn, và cả lời chia buồn trang trọng.
+Hortensia Reception|Trọn gói hoa tiệc cưới cẩm tú cầu|-|0|7|Cẩm tú cầu nhiều màu; bàn đón khách tới bàn chính|Trang trí tiệc cưới bằng cẩm tú cầu nhiều màu, từ bàn đón khách tới bàn chính.

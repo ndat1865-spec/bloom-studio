@@ -1,0 +1,23 @@
+# Danh muc hoa mac dinh, nap khi bang products con rong (xem DataSeeder).
+# Dinh dang: ten | gia (VND) | ton kho | duong dan anh | danh muc | mo ta
+# Anh nam trong static/uploads/seed/ nen di kem ung dung, khong phu thuoc thu muc lam viec.
+Noir Dahlia Hand-Tied|680000|50|uploads/seed/noir-dahlia.jpg|Bespoke Arrangements|Dark-hearted dahlias hand-tied with eucalyptus and seasonal grasses, wrapped in charcoal kraft paper.
+Midnight Garden Bouquet|950000|50|uploads/seed/midnight-garden.jpg|Bespoke Arrangements|Our darkest seasonal mix: burgundy roses, chrysanthemum and small garden stems, cut the morning it ships.
+Amber Dried Stems|450000|50|uploads/seed/amber-dried.jpg|Bespoke Arrangements|Dried stems in amber tones. Lasts for months — built for a desk, a hallway or a reception counter.
+Crimson Cluster|720000|50|uploads/seed/crimson-cluster.jpg|Bespoke Arrangements|Deep red hydrangea with silvered foliage, bound tight in a lush garden style.
+Verdant Hydrangea|580000|50|uploads/seed/verdant-hydrangea.jpg|Bespoke Arrangements|A single oversized green hydrangea head in a matte stoneware vessel.
+Deep Red Chrysanthemum|520000|50|uploads/seed/deep-red-chrysanth.jpg|Bespoke Arrangements|Dense crimson chrysanthemum, long-lasting and quietly dramatic. Our most-sent weekend gift.
+Plum Bloom Study|490000|50|uploads/seed/plum-bloom.jpg|Bespoke Arrangements|A small cluster of plum-toned blooms laid on raw timber — a still life more than a bouquet.
+Lilac by the Window|640000|50|uploads/seed/lilac-window.jpg|Bespoke Arrangements|Scented lilac cut at first light and set in white porcelain. Available in season only.
+Magnolia Statement|1800000|50|uploads/seed/magnolia-white.jpg|Event Florals|A single white magnolia against black — built as a welcome-desk piece for evening events.
+Rowan & Berry Table|2100000|50|uploads/seed/rowan-berry.jpg|Event Florals|Autumn table dressing: rowan berries, burnt-orange chrysanthemum and turning foliage.
+Ranunculus Grey Study|1950000|50|uploads/seed/ranunculus-grey.jpg|Event Florals|Ranunculus on a grey ground. Restrained composition for gallery and showroom spaces.
+Garden Jars Set|2400000|50|uploads/seed/garden-jars.jpg|Event Florals|Six glass jars of mixed dahlias, spaced down the length of a long table.
+Country Table Centrepiece|2650000|50|uploads/seed/country-table.jpg|Event Florals|A low centrepiece in the countryside manner — field flowers and fresh herbs.
+Silk Red Petal Installation|3200000|50|uploads/seed/silk-red-petal.jpg|Event Florals|Red petal wall installation, built on site. Priced per three-metre run for evening events.
+Sunshine Blossom Arch|9800000|50|uploads/seed/sunshine-blossom.jpg|Wedding Flowers|A spring ceremony arch of white blossom and greenery, built for daylight and outdoor venues.
+Pink Dahlia Bridal|8500000|50|uploads/seed/pink-dahlia.jpg|Wedding Flowers|Bridal bouquet of pink dahlias finished with a silk ribbon tie.
+Peony Blush Ceremony|11500000|50|uploads/seed/peony-blush.jpg|Wedding Flowers|Full ceremony package in blush — peonies and garden roses, aisle to altar.
+Carnation Buttonhole Set|8000000|50|uploads/seed/carnation-single.jpg|Wedding Flowers|Buttonholes for the groom and groomsmen: pink carnation on a clean white ground.
+White Bouquet in Sunlight|9200000|50|uploads/seed/white-bouquet-sun.jpg|Wedding Flowers|An all-white bouquet shot into the light — made for late-afternoon ceremonies.
+Hortensia Reception|10400000|50|uploads/seed/hortensia.jpg|Wedding Flowers|Reception styling in mixed hydrangea, from the welcome table through to the top table.

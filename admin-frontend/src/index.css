@@ -1,0 +1,251 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Bloom Studio Admin — design tokens.
+
+   Trang quan tri la CONG CU lam viec, khong phai cua hang: chu sans gon,
+   co chu 14px, mat do day, so canh cot. Van giu ho mau cua thuong hieu
+   (nen xanh reu toi + diem nhan dat nung) de hai app nhin ra la cung mot nha.
+   Khong hardcode mau/khoang cach o component — lay tu day.
+   ============================================================ */
+
+@theme {
+  /* Nen: 4 bac do sang, bac cao hon = noi len tren */
+  --color-background: hsl(150 10% 8%);
+  --color-sidebar: hsl(150 10% 10%);
+  --color-surface: hsl(150 9% 12%);
+  --color-surface-raised: hsl(150 8% 16%);
+  --color-surface-hover: hsl(150 8% 19%);
+
+  --color-foreground: hsl(40 18% 92%);
+  --color-muted-foreground: hsl(40 6% 62%);
+  --color-subtle-foreground: hsl(40 5% 46%);
+
+  --color-primary: hsl(150 12% 26%);
+  --color-primary-foreground: hsl(40 18% 92%);
+  --color-accent: hsl(15 45% 64%);
+  --color-accent-strong: hsl(15 50% 72%);
+  --color-accent-soft: hsl(15 30% 20%);
+
+  --color-border: hsl(150 7% 19%);
+  --color-border-strong: hsl(150 7% 30%);
+  --color-ring: hsl(15 45% 64%);
+
+  /* Mau trang thai: CHI dung cho y nghia (thanh cong / canh bao / loi / thong tin) */
+  --color-danger: hsl(4 65% 66%);
+  --color-success: hsl(146 38% 58%);
+  --color-warning: hsl(38 80% 62%);
+  --color-info: hsl(205 55% 66%);
+
+  --font-display: "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Hai bac bo goc cho ca giao dien: 6px (nut, o nhap) va 10px (the, bang) */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-chip: 999px;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.25), 0 0 0 1px rgb(255 255 255 / 0.02);
+  --shadow-pop: 0 16px 40px rgb(0 0 0 / 0.45), 0 2px 8px rgb(0 0 0 / 0.3);
+
+  --ease-entrance: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    /* Giao dien toi: trinh duyet dung bang mau toi cho o tu dien, thanh cuon, o chon */
+    color-scheme: dark;
+  }
+
+  /* ============================================================
+     Autofill cua trinh duyet: Chrome to nen xanh nhat (#e8f0fe) len o nhap da
+     dien san bang !important - background-color khong de duoc, va meo
+     "transition 100000s" cu da bi Chrome ban moi bo qua (o nhap bi trang loa,
+     chu mau sang tren nen sang gan nhu khong doc duoc).
+     Cach chac chan: phu mot bong do inset cung mau nen o nhap len tren nen do.
+     ============================================================ */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--color-background) inset;
+    box-shadow: 0 0 0 1000px var(--color-background) inset;
+    -webkit-text-fill-color: var(--color-foreground);
+    caret-color: var(--color-foreground);
+    transition: background-color 100000s ease-in-out 0s;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  code {
+    font-family: ui-monospace, "SFMono-Regular", "Cascadia Code", Consolas, monospace;
+    font-size: 0.8125rem;
+  }
+
+  /* Icon lich/gio cua trinh duyet doi sang bang mau toi cho khop giao dien */
+  input[type="date"],
+  input[type="time"],
+  select {
+    color-scheme: dark;
+  }
+
+  /* Danh sach tha xuong cua <select>: nen toi + chu sang, khong de trinh duyet ve nen trang */
+  option {
+    background-color: var(--color-surface-raised);
+    color: var(--color-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-background);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 999px;
+    border: 2px solid var(--color-background);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+  }
+}
+
+@layer components {
+  /* Nhan nho in hoa: tieu de cot bang, nhom menu. 11px, gian chu vua phai. */
+  .label-micro {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    /* 1.3 thay vi 1: chu IN HOA tieng Viet co dau (Ỏ, Ấ, Ệ) cao hon chu hoa, de 1 se bi cat dau */
+    line-height: 1.3;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Khung noi dung ben phai sidebar */
+  .shell {
+    width: 100%;
+    max-width: 90rem; /* 1440px */
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  .page-pad {
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+  }
+  @media (min-width: 1024px) {
+    .page-pad {
+      padding-top: 2rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  /* The noi dung chuan cua trang quan tri */
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Bang du lieu: dong 44px, tieu de cot dinh nen nhat */
+  .data-table {
+    /*
+      relative: chu an (.sr-only) cua nut trong bang la position:absolute. Khong co khoi
+      chua thi chung thoat khoi khung overflow-x-auto va keo gian ca trang theo chieu ngang.
+    */
+    position: relative;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .data-table thead th {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.3;
+    color: var(--color-muted-foreground);
+    background: var(--color-surface-raised);
+    padding: 0.625rem 1rem;
+    white-space: nowrap;
+  }
+  .data-table tbody td {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--color-border);
+    vertical-align: middle;
+  }
+  .data-table tbody tr {
+    transition: background-color 120ms;
+  }
+  .data-table tbody tr:hover {
+    background: var(--color-surface-hover);
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .prose-measure {
+    max-width: 65ch;
+  }
+}

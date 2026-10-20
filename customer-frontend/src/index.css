@@ -1,0 +1,290 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Bloom Studio — design tokens.
+   Nguon: DESIGN.md o goc du an. Khong hardcode mau/khoang cach o component.
+   ============================================================ */
+
+@theme {
+  --color-background: hsl(145 12% 11%);
+  --color-surface: hsl(145 10% 15%);
+  --color-surface-raised: hsl(145 8% 19%);
+  --color-foreground: hsl(38 22% 93%);
+  --color-muted-foreground: hsl(38 10% 60%);
+  --color-primary: hsl(145 14% 30%);
+  --color-primary-foreground: hsl(38 22% 93%);
+  --color-accent: hsl(15 38% 62%);
+  --color-accent-strong: hsl(15 42% 70%);
+  --color-border: hsl(145 8% 22%);
+  --color-border-strong: hsl(145 10% 46%);
+  --color-ring: hsl(15 38% 62%);
+  --color-danger: hsl(4 62% 68%);
+  --color-success: hsl(146 34% 62%);
+
+  --font-display: "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --radius-chip: 999px;
+
+  /* Nhip doc cua trang: padding doc giong nhau o moi section */
+  --spacing-section: 8rem; /* 128px */
+  --spacing-section-md: 5rem; /* 80px */
+  --spacing-section-sm: 3.5rem; /* 56px */
+
+  /*
+    Trang ung dung (khong phai landing page) dung nhip BAT DOI XUNG:
+    tren chat vi da co navbar dinh lam "tran", duoi rong de tho truoc footer.
+  */
+  --spacing-page-top: 3.5rem; /* 56px */
+  --spacing-page-top-md: 2.5rem; /* 40px */
+  --spacing-page-top-sm: 2rem; /* 32px */
+
+  --ease-entrance: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  /* ============================================================
+     Autofill cua trinh duyet.
+
+     Chrome tu to nen sang (gan nhu trang) len o vua duoc dien san tai khoan.
+     Truoc day o nhap co nen surface-raised nen khong lo ra; tu khi doi sang
+     kieu gach chan nen trong suot thi mang trang do dap thang vao mat.
+
+     Khong the ghi de bang background-color: Chrome ap mau autofill o mot lop
+     rieng, uu tien cao hon moi khai bao cua trang. Hai cach thoat duy nhat:
+      - background-clip: text  -> nen autofill chi to sau CHU, coi nhu bien mat
+      - text-fill-color        -> giu chu sang mau foreground thay vi den
+     transition dai la chot chan cho vai trinh duyet khong ho tro cach tren.
+     ============================================================ */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: var(--color-foreground);
+    caret-color: var(--color-foreground);
+    transition: background-color 100000s ease-in-out 0s;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  blockquote {
+    /* Khong de mot tu lac loi o dong cuoi */
+    text-wrap: pretty;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+    /* Nhan dien Bloom Studio: canh anh luon vuong */
+    border-radius: 0;
+  }
+
+  /* Icon lich/gio cua trinh duyet doi sang bang mau toi cho khop giao dien */
+  input[type="date"],
+  input[type="time"],
+  select {
+    color-scheme: dark;
+  }
+
+  /*
+    Danh sach tha xuong cua <select> do trinh duyet tu ve, mac dinh nen TRANG nhung
+    chu lai ke thua mau kem cua giao dien -> kem tren trang, gan nhu khong doc duoc.
+    Dat mau nen + chu ro rang cho tung <option>.
+  */
+  option {
+    background-color: var(--color-surface-raised);
+    color: var(--color-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-background);
+  }
+
+  /* Thanh cuon hoa hop voi nen toi */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-background);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+  }
+}
+
+@layer components {
+  /* Nhan micro in hoa — doi trong ky thuat cho serif nghieng co lon */
+  .label-micro {
+    font-family: var(--font-sans);
+    font-size: 0.625rem;
+    font-weight: 500;
+    /*
+      1.2 chu khong phai 1: chu IN HOA tieng Viet co dau nam CAO HON chieu cao chu hoa
+      (Ỏ, Ấ, Ệ...). Voi line-height 1, dau bi cat mat trong bat ky khoi nao co
+      overflow: hidden. 12px thay vi 10px — thay doi khong dang ke ve bo cuc.
+    */
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .display-hero {
+    font-size: clamp(3.25rem, 8vw, 7.2rem);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+  }
+
+  .display-section {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+
+  .display-lg {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .pull-quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+    line-height: 1.35;
+  }
+
+  .prose-measure {
+    max-width: 65ch;
+  }
+
+  .section-pad {
+    padding-block: var(--spacing-section-sm);
+  }
+  @media (min-width: 768px) {
+    .section-pad {
+      padding-block: var(--spacing-section-md);
+    }
+  }
+  @media (min-width: 1024px) {
+    .section-pad {
+      padding-block: var(--spacing-section);
+    }
+  }
+
+  /*
+    Nhip cho TRANG UNG DUNG: /products, /cart, /checkout, /orders/:id, 404.
+    Landing page dung .section-pad (doi xung 128px) — KHONG dung class nay.
+  */
+  .page-pad {
+    padding-top: var(--spacing-page-top-sm);
+    padding-bottom: var(--spacing-section-sm);
+  }
+  @media (min-width: 768px) {
+    .page-pad {
+      padding-top: var(--spacing-page-top-md);
+      padding-bottom: var(--spacing-section-md);
+    }
+  }
+  @media (min-width: 1024px) {
+    .page-pad {
+      padding-top: var(--spacing-page-top);
+      padding-bottom: var(--spacing-section);
+    }
+  }
+
+  .shell {
+    width: 100%;
+    max-width: 77.5rem; /* 1240px */
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ============================================================
+   Trang thai xuat phat cua animation.
+   Dat trong CSS de tranh nhay noi dung truoc khi GSAP chay (FOUC).
+
+   Khoi nay chi ap dung o (prefers-reduced-motion: no-preference).
+   Khi nguoi dung bat "giam chuyen dong", cac quy tac nay KHONG ton tai,
+   nen noi dung hien day du ngay ca khi GSAP khong chay tween nao.
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  [data-anim="fade-up"],
+  [data-anim="reveal"] {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  [data-anim="rule"] {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  [data-anim="detail"] {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
